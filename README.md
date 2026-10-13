@@ -39,7 +39,7 @@ Two layers, because this panel lies about DDC:
 1. **Hardware** — `ddcutil` sets color preset **6500&nbsp;K** (D65). RGB actually moves. Contrast, saturation, and brightness VCP writes are advertised, then ignored.
 2. **Compositor** — a Hyprland `screen_shader` applies a gentle S-curve, a little black crush, and vibrance that leaves already-saturated pixels alone.
 
-A flag file turns the shader on. An Omarchy `post-boot` hook puts 6500&nbsp;K back after login.
+A flag file turns the shader on. `oled-look.sh` also sets `decoration:screen_shader` via `hyprctl`, so a wiped `looknfeel.lua` still applies until the next compositor reload. An Omarchy `post-boot` hook puts 6500&nbsp;K and the shader back after login.
 
 ## Install
 
@@ -71,7 +71,7 @@ Edit `~/.config/hypr/shaders/oled-look.frag` and reload (`oled-look.sh on` or `h
 | Knob | Default | Effect |
 | --- | --- | --- |
 | `CONTRAST` | `0.32` | Mix toward an S-curve |
-| `VIBRANCE` | `1.16` | Boost weak chroma, protect skin/sky |
+| `VIBRANCE` | `1.2` | Boost weak chroma, protect skin/sky |
 | `BLACK_CRUSH` | `0.022` | Fake a lower black floor |
 | `GAMMA` | `1.055` | Slightly darker midtones |
 
@@ -81,10 +81,10 @@ If the OSD still has Contrast / Color, those stack with the shader — DDC canno
 
 | Path | Role |
 | --- | --- |
-| `oled-look.sh` | Toggle: flag + DDC preset + `hyprctl reload` |
+| `oled-look.sh` | Toggle: flag + DDC preset + `hyprctl reload` + shader keyword |
 | `shaders/oled-look.frag` | Hyprland `decoration:screen_shader` |
-| `snippets/looknfeel.lua` | Load the shader only when the flag exists |
-| `hooks/oled-look-hook.sh` | Re-apply 6500&nbsp;K on Omarchy `post-boot` |
+| `snippets/looknfeel.lua` | Load the shader only when the flag exists (survives reload) |
+| `hooks/oled-look-hook.sh` | Re-apply 6500&nbsp;K and the shader on Omarchy `post-boot` |
 | `preview/` | Off / on photos and the comparison strip |
 
 Flag: `~/.local/state/omarchy/oled-look`

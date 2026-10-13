@@ -7,7 +7,7 @@ layout(location = 0) out vec4 fragColor;
 uniform sampler2D tex;
 
 const float CONTRAST = 0.32;
-const float VIBRANCE = 1.16;
+const float VIBRANCE = 1.2;
 const float BLACK_CRUSH = 0.022;
 const float GAMMA = 1.055;
 

@@ -28,21 +28,27 @@ set_preset() {
   ddcutil --skip-ddc-checks scs >/dev/null 2>&1 || true
 }
 
+apply_shader() {
+  command -v hyprctl >/dev/null || return 0
+  # Reload so looknfeel.lua can pick up the flag. Keyword is the fallback
+  # if that snippet was wiped (omarchy refresh looknfeel).
+  hyprctl reload >/dev/null
+  hyprctl keyword decoration:screen_shader "$1" >/dev/null
+}
+
 case $cmd in
   on)
     [[ -f $SHADER ]] || { echo "missing shader: $SHADER" >&2; exit 1; }
     : >"$FLAG"
     set_preset 0x05
+    apply_shader "$SHADER"
     ;;
   off)
     rm -f "$FLAG"
     set_preset 0x08
+    apply_shader ""
     ;;
   *)
     usage
     ;;
 esac
-
-if command -v hyprctl >/dev/null; then
-  hyprctl reload >/dev/null
-fi
